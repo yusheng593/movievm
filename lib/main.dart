@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movievm/constants/my_theme_data.dart';
+import 'package:movievm/screens/favorites_screen.dart';
+import 'package:movievm/screens/movie_details.dart';
 import 'package:movievm/screens/movies_screen.dart';
+import 'package:movievm/screens/splash_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,8 +14,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: MoviesScreen()),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'MovieVM',
+      theme: MyThemeData.darkTheme,
+      home: const MoviesScreen(),
     );
   }
 }
