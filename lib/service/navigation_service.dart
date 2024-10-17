@@ -18,4 +18,28 @@ class NavigationService {
       MaterialPageRoute(builder: (context) => widget),
     );
   }
+
+  Future<void> showDialog(Widget widget) async {
+    final navContext = navigatorKey.currentContext;
+    if (navContext == null) {
+      return;
+    }
+    await showAdaptiveDialog(context: navContext, builder: (context) => widget);
+  }
+
+  void showSnackbar(String message) {
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      return;
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+        ),
+      ),
+    );
+  }
 }
