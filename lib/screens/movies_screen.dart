@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:movievm/constants/my_app_icons.dart';
+import 'package:movievm/models/movies_genre.dart';
+import 'package:movievm/models/movies_model.dart';
+import 'package:movievm/repository/movies_repo.dart';
 import 'package:movievm/screens/favorites_screen.dart';
 import 'package:movievm/service/init_getit.dart';
 import 'package:movievm/service/navigation_service.dart';
@@ -24,9 +29,17 @@ class MoviesScreen extends StatelessWidget {
               color: Colors.red,
             ),
           ),
-          const IconButton(
-            onPressed: null,
-            icon: Icon(MyAppIcons.darkmode),
+          IconButton(
+            onPressed: () async {
+              final List<MovieModel> moviews =
+                  await getIt<MoviesRepository>().fetchMovies();
+              log('movie: $moviews');
+
+              final List<MoviesGenreModel> genres =
+                  await getIt<MoviesRepository>().fetchGenres();
+              log('movie: $genres');
+            },
+            icon: const Icon(MyAppIcons.darkmode),
           )
         ],
       ),

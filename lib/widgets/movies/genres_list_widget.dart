@@ -18,14 +18,14 @@ class GenresListWidget extends StatelessWidget {
   Widget chipWidget(
       {required String genreName, required BuildContext context}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
           border: Border.all(color: Theme.of(context).colorScheme.tertiary),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         child: Text(
           genreName,
           style: TextStyle(
