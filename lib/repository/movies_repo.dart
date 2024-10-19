@@ -4,6 +4,7 @@ import 'package:movievm/service/api_service.dart';
 
 class MoviesRepository {
   final ApiService _apiService;
+  List<MoviesGenreModel> cachedGenres = [];
 
   MoviesRepository(this._apiService);
 
@@ -12,6 +13,6 @@ class MoviesRepository {
   }
 
   Future<List<MoviesGenreModel>> fetchGenres() async {
-    return await _apiService.fetchGenres();
+    return cachedGenres = await _apiService.fetchGenres();
   }
 }

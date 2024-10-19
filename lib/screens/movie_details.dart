@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:movievm/constants/my_app_constants.dart';
+import 'package:movievm/constants/api_constants.dart';
+import 'package:movievm/models/movies_model.dart';
 import 'package:movievm/widgets/cached_image.dart';
 import 'package:movievm/widgets/movies/favorite_btn.dart';
 import 'package:movievm/widgets/movies/genres_list_widget.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
-  const MovieDetailsScreen({super.key});
+  const MovieDetailsScreen({super.key, required this.movieModel});
+
+  final MovieModel movieModel;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +17,14 @@ class MovieDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            SizedBox(
-              height: size.height * 0.45,
-              width: double.infinity,
-              child: const CachedImageWidget(imgUrl: MyAppConstants.movieImage),
+            Hero(
+              tag: movieModel.id,
+              child: SizedBox(
+                height: size.height * 0.45,
+                width: double.infinity,
+                child: CachedImageWidget(
+                    imgUrl: ApiConstants.postUrl + movieModel.posterPath),
+              ),
             ),
             SingleChildScrollView(
               child: Column(
@@ -38,7 +45,7 @@ class MovieDetailsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Movie title',
+                                  movieModel.title,
                                   maxLines: 2,
                                   style: TextStyle(
                                       color:
@@ -49,27 +56,31 @@ class MovieDetailsScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                const Row(
+                                Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.star,
                                       color: Colors.amber,
                                       size: 20,
                                     ),
-                                    SizedBox(width: 8),
-                                    Text("9/10"),
-                                    Spacer(),
+                                    const SizedBox(width: 8),
                                     Text(
-                                      "Release Date",
-                                      style: TextStyle(color: Colors.grey),
+                                        '${movieModel.formattedVoteAverage}/10'),
+                                    const Spacer(),
+                                    Text(
+                                      movieModel.releaseDate,
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                const GenresListWidget(),
+                                GenresListWidget(
+                                  moviesModel: movieModel,
+                                ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'overview, ' * 200,
+                                  movieModel.overview,
                                   textAlign: TextAlign.justify,
                                   style: const TextStyle(fontSize: 18),
                                 )

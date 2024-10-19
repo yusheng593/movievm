@@ -68,6 +68,11 @@ class MovieModel {
     };
   }
 
+  // 新增 getter，返回格式化後的 voteAverage
+  String get formattedVoteAverage {
+    return voteAverage.toStringAsFixed(1);
+  }
+
   @override
   String toString() {
     return 'MovieModel(adult: $adult, backdropPath: $backdropPath, genreIds: $genreIds, id: $id, originalLanguage: $originalLanguage, originalTitle: $originalTitle, overview: $overview, popularity: $popularity, posterPath: $posterPath, releaseDate: $releaseDate, title: $title, video: $video, voteAverage: $voteAverage, voteCount: $voteCount)';
