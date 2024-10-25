@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movievm/constants/my_app_icons.dart';
-import 'package:movievm/models/movies_genre.dart';
-import 'package:movievm/models/movies_model.dart';
-import 'package:movievm/repository/movies_repo.dart';
+import 'package:movievm/enums/theme_enums.dart';
 import 'package:movievm/screens/favorites_screen.dart';
 import 'package:movievm/service/init_getit.dart';
 import 'package:movievm/service/navigation_service.dart';
+import 'package:movievm/view_models/movie/movies_provider.dart';
+import 'package:movievm/view_models/theme_provider.dart';
 import 'package:movievm/widgets/movies/movies_widget.dart';
 
 class MoviesScreen extends StatelessWidget {
@@ -29,25 +28,51 @@ class MoviesScreen extends StatelessWidget {
               color: Colors.red,
             ),
           ),
-          IconButton(
-            onPressed: () async {
-              final List<MovieModel> moviews =
-                  await getIt<MoviesRepository>().fetchMovies();
-              log('movie: $moviews');
-
-              final List<MoviesGenreModel> genres =
-                  await getIt<MoviesRepository>().fetchGenres();
-              log('movie: $genres');
+          Consumer(
+            builder: (context, ref, child) {
+              final themeState = ref.watch(themeProvider);
+              return IconButton(
+                onPressed: () async {
+                  await ref.read(themeProvider.notifier).toggleTheme();
+                },
+                icon: Icon(themeState == ThemeEnums.dark
+                    ? MyAppIcons.darkMode
+                    : MyAppIcons.lightMode),
+              );
             },
-            icon: const Icon(MyAppIcons.darkmode),
           )
         ],
       ),
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return const MoviesWidget();
-          }),
+      body: Consumer(builder: (context, WidgetRef ref, child) {
+        final movieState = ref.watch(moviesProvider);
+
+        if (movieState.isLoading && movieState.moviesList.isEmpty) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        } else if (movieState.fetchMoviesError.isNotEmpty) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        } else {
+          return NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo.metrics.pixels ==
+                      scrollInfo.metrics.maxScrollExtent &&
+                  !movieState.isLoading) {
+                Future.microtask(() async {
+                  await ref.read(moviesProvider.notifier).getMovies();
+                });
+                return true;
+              }
+              return false;
+            },
+            child: ListView.builder(
+                itemCount: movieState.moviesList.length,
+                itemBuilder: (context, index) {
+                  return MoviesWidget(
+                    movieModel: movieState.moviesList[index],
+                  );
+                }),
+          );
+        }
+      }),
     );
   }
 }
