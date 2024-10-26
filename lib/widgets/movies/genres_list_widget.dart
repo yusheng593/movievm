@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:movievm/constants/my_app_constants.dart';
+import 'package:movievm/models/movies_genre.dart';
+import 'package:movievm/models/movies_model.dart';
+import 'package:movievm/utils/genre_utils.dart';
 
 class GenresListWidget extends StatelessWidget {
-  const GenresListWidget({super.key});
+  const GenresListWidget({super.key, required this.moviesModel});
+  final MovieModel moviesModel;
 
   @override
   Widget build(BuildContext context) {
+    List<MoviesGenreModel> movieGenres =
+        GenreUtils.moviesGenreNames(moviesModel.genreIds, context);
+
     return Wrap(
       children: List.generate(
-        MyAppConstants.genres.length,
+        movieGenres.length,
         (index) => chipWidget(
-            genreName: MyAppConstants.genres[index], context: context),
+            genreName: movieGenres[index].name ?? '', context: context),
       ),
     );
   }

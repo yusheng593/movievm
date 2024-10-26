@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class ApiService {
   Future<List<MovieModel>> fetchMovies({int page = 1}) async {
     final url = Uri.parse(
-        '${ApiConstants.baseUrl}/movie/popular?language=zh-tw&page=1');
+        '${ApiConstants.baseUrl}/movie/popular?language=zh-tw&page=$page');
     final response = await http.get(url, headers: ApiConstants.headers);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

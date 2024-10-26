@@ -1,4 +1,6 @@
-class MovieModel {
+import 'package:flutter/material.dart';
+
+class MovieModel with ChangeNotifier {
   bool adult;
   String backdropPath;
   List<int> genreIds;
@@ -66,6 +68,11 @@ class MovieModel {
       'vote_average': voteAverage,
       'vote_count': voteCount,
     };
+  }
+
+  // 新增 getter，返回格式化後的 voteAverage
+  String get formattedVoteAverage {
+    return voteAverage.toStringAsFixed(1);
   }
 
   @override

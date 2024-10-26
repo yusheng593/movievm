@@ -7,7 +7,7 @@ class MoviesRepository {
 
   MoviesRepository(this._apiService);
 
-  Future<List<MovieModel>> fetchMovies({int page = 1}) async {
+  Future<List<MovieModel>> fetchMovies({required int page}) async {
     return await _apiService.fetchMovies(page: page);
   }
 
